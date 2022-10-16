@@ -19,6 +19,7 @@ public class Week7Program extends Application {
     public void start(Stage stage) {
 
         boolean end = false;
+        int onLine = 0;
         //initialize variables for scene
         int sceneX = 0;
         int sceneY = 0;
@@ -46,57 +47,65 @@ public class Week7Program extends Application {
 
                 String command = linearray[0];
 
+                onLine++;//for finding what line an error is on
+
 //processing commands
-                switch (command){
-                    case "SIZE":
-                        sceneX = Integer.parseInt(linearray[1]);
-                        sceneY = Integer.parseInt(linearray[2]);
-                        break;
-                    case "LINE":
-                        //System.out.println((Double.parseDouble(linearray[1]) + Double.parseDouble(linearray[2]) + Double.parseDouble(linearray[3]) + Double.parseDouble(linearray[4])));
-                        root.getChildren().add(makeLine(Double.parseDouble(linearray[1]), Double.parseDouble((linearray[2])), Double.parseDouble(linearray[3]), Double.parseDouble(linearray[4])));
-                        break;
-                    case "CIRCLE":
-                        root.getChildren().add(makeCircle(Double.parseDouble(linearray[1]), Double.parseDouble(linearray[2]), Double.parseDouble(linearray[3])));
-                        break;
-                    case "RECTANGLE":
-                        root.getChildren().add(makeRectangle(Double.parseDouble(linearray[1]), Double.parseDouble(linearray[2]), Double.parseDouble(linearray[3]), Double.parseDouble(linearray[4])));
-                        break;
-                    case "TEXT":
-                        String[] textarray = new String[linearray.length - 3];
-                        for (int i = 3; i < linearray.length; i++){
-                            textarray[i-3] = linearray[i];
-                        }
+                try {
+                    switch (command) {
+                        case "SIZE":
+                            try {
+                                sceneX = Integer.parseInt(linearray[1]);
+                                sceneY = Integer.parseInt(linearray[2]);
+                            } catch (Exception e) {
+                                System.out.println("ERROR: There was a problem with the numbers in your size command (Line " + onLine + ").");
+                            }
+                            break;
+                        case "LINE":
+                            root.getChildren().add(makeLine(Double.parseDouble(linearray[1]), Double.parseDouble((linearray[2])), Double.parseDouble(linearray[3]), Double.parseDouble(linearray[4])));
+                            break;
+                        case "CIRCLE":
+                            root.getChildren().add(makeCircle(Double.parseDouble(linearray[1]), Double.parseDouble(linearray[2]), Double.parseDouble(linearray[3])));
+                            break;
+                        case "RECTANGLE":
+                            root.getChildren().add(makeRectangle(Double.parseDouble(linearray[1]), Double.parseDouble(linearray[2]), Double.parseDouble(linearray[3]), Double.parseDouble(linearray[4])));
+                            break;
+                        case "TEXT":
+                            String[] textarray = new String[linearray.length - 3];
+                            for (int i = 3; i < linearray.length; i++) {
+                                textarray[i - 3] = linearray[i];
+                            }
 
-                        String text = Arrays.toString(textarray)
-                                .replace("[", "")
-                                        .replace("]", "")
-                                                .replace(", ", " ");
-                        System.out.println(text);
+                            String text = Arrays.toString(textarray)
+                                    .replace("[", "")
+                                    .replace("]", "")
+                                    .replace(", ", " ");
+                            System.out.println(text);
 
-                        root.getChildren().add(makeText(Double.parseDouble(linearray[1]), Double.parseDouble(linearray[2]), text));
-                        break;
-                    case "END":
-                        end = true;
-                        break;
-                    default:
-                        if (Arrays.toString(linearray).contains("//")){
+                            root.getChildren().add(makeText(Double.parseDouble(linearray[1]), Double.parseDouble(linearray[2]), text));
+                            break;
+                        case "END":
+                            end = true;
+                            break;
+                        default:
+                            if (Arrays.toString(linearray).contains("//")) {
+                                break;
+                            } else if (command.equals("")) {
+                                break;
+                            } else {
+                                System.out.println("ERROR reading line: " + Arrays.toString(linearray) + " on line " + onLine);
+                            }
                             break;
                     }
-                        else if (command.equals("")){
-                            break;
-                        }
-                        else {
-                            System.out.println("Error reading line: " + Arrays.toString(linearray));
-                        }
-                        break;
+                }catch (Exception e){
+                    System.out.println("ERROR with input on line " + onLine);
                 }
 
             }
         }
         catch (IOException e)
         {
-
+            end = true;//just to keep the no end statement error from appearing
+            System.out.println("There was an error with your file name.\nIf your file is in your program folder (mine is called Week7Program)\nyou should just be able to say \"example-1.txt\" or something like that");
         }
 
 //make scene
@@ -106,6 +115,9 @@ public class Week7Program extends Application {
         stage.setTitle(filename);
         stage.setScene(scene);
         stage.show();
+        if (end == false){
+            System.out.println("There was no end statement but the program still ran anyway.");
+        }
     }
 
     private Line makeLine(double x1, double y1, double x2, double y2){

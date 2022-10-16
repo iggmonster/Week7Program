@@ -1,0 +1,9 @@
+
+SIZE 0 w
+
+
+LINE 0 475 25 r
+
+asd
+
+END
