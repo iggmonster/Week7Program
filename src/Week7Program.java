@@ -12,9 +12,12 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * @author Keiffer Button
+ * Class: CS1131 Accelerated Intro to Programming
+ * Lab Section: L01
+ */
 public class Week7Program extends Application {
-
-    private Stage stage = null;
 
     public void start(Stage stage) {
 
@@ -32,14 +35,14 @@ public class Week7Program extends Application {
         Group root = new Group( );
 
 //file reading
-        String line = "";
+        String line;
         String splitBy = " ";
         try
         {
             BufferedReader br = new BufferedReader(new FileReader(filename));
             while ((line = br.readLine()) != null)
             {
-                if (end == true){
+                if (end){
                     break;
                 }
                 String[] linearray = line.split(splitBy);
@@ -71,9 +74,7 @@ public class Week7Program extends Application {
                             break;
                         case "TEXT":
                             String[] textarray = new String[linearray.length - 3];
-                            for (int i = 3; i < linearray.length; i++) {
-                                textarray[i - 3] = linearray[i];
-                            }
+                            System.arraycopy(linearray, 3, textarray, 0, linearray.length - 3);
 
                             String text = Arrays.toString(textarray)
                                     .replace("[", "")
@@ -115,7 +116,7 @@ public class Week7Program extends Application {
         stage.setTitle(filename);
         stage.setScene(scene);
         stage.show();
-        if (end == false){
+        if (!end){
             System.out.println("There was no end statement but the program still ran anyway.");
         }
     }
@@ -148,9 +149,8 @@ public class Week7Program extends Application {
 
     /**
      * The main method
-     * @param args
      */
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) {
         launch(args);
     }
 
